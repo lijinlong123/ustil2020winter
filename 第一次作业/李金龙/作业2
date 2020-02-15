@@ -1,0 +1,121 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+class Package {
+	//寄件人和收件人姓名、地址和包裹重量属性；
+protected:
+	char* ShouJianmen;
+	char* JiJianmen;
+	char* DiZhi;
+	int ZhongLiang;
+	int many;
+	int GongLi;
+public:
+	Package(){
+		ShouJianmen = NULL;
+		JiJianmen = NULL;
+		DiZhi = NULL;
+	    ZhongLiang=0;
+		many=0;
+		GongLi=0;
+	}
+	void setShouJianmen(char* a) {
+		ShouJianmen= a;
+	}
+	void setJiJianmen(char* a) {
+		JiJianmen= a;
+	}
+	void setDiZhi(char* a) {
+		DiZhi = a;
+	}
+	void setZhongLing(int a) {
+		ZhongLiang = a;
+	}
+	void setGongLi(int i) {
+		GongLi = i;
+	}
+	virtual int calculateCost() = 0;
+};
+class PuTong : public Package {
+public:
+	int calculateCost(){
+		cout << "普通包裹首重10kg，收15元；超过首重按每kg收2元计算。" << endl;
+		if (0<ZhongLiang <= 10) {
+			many = 15;
+			return many;
+		}
+		else if(ZhongLiang>10){
+			many = 15 + (ZhongLiang - 10) * 2;
+			return many;
+		}
+	}	
+};
+//普通包裹增加首重计费和超首重后部分的的每公斤计费单价属性，
+//按首重+超重*每公斤计费单价计算总费用。
+class JiaJi : public Package {
+public:
+	int calculateCost(){
+		cout << "加急包裹加急起价费10元，每kg收10元，每公里收0.02元" << endl;
+		cout << "请输入公里数" << endl;
+		cin >> GongLi;
+		many = (10 + ZhongLiang * 10 + GongLi * 0.02);
+		return many;
+	}
+};
+//加急包裹没有首重限制，但有加急起价费用属性，
+//按加急起价费 + 重量 * 10 + 加急公里数 * 0.02 计算总费用。
+int main() {
+	int i;
+	cout << "普通包裹请输入1，加急包裹请输入2" << endl;
+	cout << "请输入:" << endl;
+	cin >> i;
+	if (i == 1) {     //普通包裹
+		cout << "请输入寄件人和收件人姓名、地址、公里数和包裹重量属性" << endl;
+		int zl;
+		char* jjr=new char[20] ;
+		char* sjr= new char[20];
+		char* dz=new char[20]; 
+		cout << "寄件人:" << endl;        cin >> jjr;
+		cout << "收件人:" << endl;        cin >> sjr;
+		cout << "地址:" << endl;          cin >> dz;
+		cout << "包裹重量:" << endl;      cin >> zl;
+		Package* p1;
+		PuTong pt;
+		p1 = &pt;
+		p1->setDiZhi(dz);
+		p1->setJiJianmen(jjr);
+		p1->setShouJianmen(sjr);
+		p1->setZhongLing(zl);
+		int a;
+		a = p1->calculateCost();
+		cout << "收价为：" << endl;
+		cout << a << endl;
+	
+	}
+	if (i == 2) {
+		cout << "请输入寄件人和收件人姓名、地址和包裹重量属性" << endl;
+		int zl,gls;
+		char* jjr= new char[20]; 
+		char* sjr= new char[20];
+		char* dz= new char[20];
+		cout << "寄件人:" << endl;        cin >> jjr;
+		cout << "收件人:" << endl;        cin >> sjr;
+		cout << "地址:" << endl;          cin >> dz;
+		cout << "包裹重量:" << endl;      cin >> zl;
+		cout << "公里数:" << endl;        cin >> gls;
+		Package* p2;
+		JiaJi jj;
+		p2 = &jj;
+		p2->setDiZhi(dz);
+		p2->setJiJianmen(jjr);
+		p2->setShouJianmen(sjr);
+		p2->setZhongLing(zl);
+		p2->setGongLi(gls);
+		int a;
+		a= p2->calculateCost();
+		cout << "收价为：" << endl;
+		cout << a << endl;
+	}
+	system("pause");
+	return 0;
+}
