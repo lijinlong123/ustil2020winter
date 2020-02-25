@@ -1,0 +1,138 @@
+#include<iostream>
+using namespace std;
+typedef struct bitnode {             //二叉树结点数据类型
+	int data;
+	struct bitnode* z;
+	struct bitnode* y;
+}Bitnode,*bitree;
+
+bitree jiantree() {                  //建造二叉树
+	bitree A;
+	int i;
+	cin >> i;
+	if (i == 0){                     //如果输入0，则表示节点为空
+		A = NULL;
+	}
+	else{
+		A = (bitree)malloc(sizeof(Bitnode));
+		A->data = i;
+		A->z = jiantree();           //递归左子树
+		A->y = jiantree();           //递归右子树
+	}
+	return A;
+}
+
+void Xiantree(bitree a) {            //先序遍历二叉树
+	if (a) {
+		cout << a->data <<" ";
+		Xiantree(a->z);              //递归先序遍历左树
+		Xiantree(a->y);              //递归先序遍历右树
+	}
+	else {
+		cout <<"@" <<" ";          //空节点输出@
+	}
+}
+
+void Zhongtree(bitree a) {            //中序遍历二叉树
+	if (a) {
+		
+		Zhongtree(a->z);              //递归中序遍历左树
+		cout << a->data <<" ";
+		Zhongtree(a->y);              //递归中序遍历右树
+	}
+	else {
+		cout << "@" << " ";
+	}
+}
+
+void Houtree(bitree a) {              //后序遍历二叉树
+	if (a) {
+		
+		Houtree(a->z);               //递归后序遍历左树
+		Houtree(a->y);               //递归后序遍历右树
+		cout << a->data <<" ";
+	}
+	else {
+		cout << "@" <<" ";
+	}
+}
+
+void disXiantree(bitree a) {         //非递归先序遍历
+	if (a == NULL) {
+		return;
+	}
+	struct bitnode* stack[10];           //准备栈
+	int i= -1;                       //栈顶标记
+	bitree b=a;                      //移动指针指向头节点
+	while (i != -1 || b) {           //i!=-1表示栈内不为空，b表示节点不为空
+		//根 左 右
+		//找到最左
+		while (b) {
+			cout << b->data;         //打印数据
+			stack[++i] = b;          //然后入栈
+			b = b->z;                //使指针往左下移动
+		}
+		//指针无路可走，指针走到叶节点的左孩子，叶节点入栈，指针现在为空
+		//出栈
+		if (i != -1) {
+			b = stack[i];           //指针回到上一级节点，第一遍循环变为叶子节点
+			i--;                    //出栈
+			b = b->y;               //向右移动
+		}
+	}
+}
+//1.定义一个指针移动到最左边，把走过的地方入栈
+//2.无路时，出栈，打印当前节点的元素
+//3.出栈后，打印当前节点元素，判断当前节点是否有右孩子，如果有就去右边
+void disZhongtree(bitree a) {
+	if (a == NULL) {
+		return;
+	}
+	struct bitnode* stack[10];
+	int i = -1;
+	bitree b=a;
+	while (i != -1 || b) {
+		//走到最走，把走过的节点入栈
+		while (b) {
+			stack[++i] = b;
+			b = b->z;
+		}
+		//出栈
+		if (i != -1) {
+			b = stack[i];
+			i--;
+			cout << b->data;
+			b = b->y;
+		}
+	}
+
+}
+
+int main() {
+	bitree shu;
+	cout << "请输入数据建立二叉树" << endl;
+	shu = jiantree();
+	cout << "先序遍历输入1；中序遍历输入2；后序遍历输入3" << endl;
+	int a;
+	cin >> a;
+	if (a == 1) {
+		Xiantree(shu);
+	}
+	if (a == 2) {
+		Zhongtree(shu);
+	}
+	if (a == 3) {
+		Houtree(shu);
+	}
+	cout << " " << endl;
+	cout << "非先序遍历输入1；非中序遍历输入2" << endl;
+	int sd;
+	cin >> sd;
+	if (sd == 1) {
+		disXiantree(shu);
+	}
+	if (sd == 2) {
+		disZhongtree(shu);
+	}
+	return 0;
+}
