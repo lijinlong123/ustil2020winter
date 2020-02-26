@@ -1,0 +1,67 @@
+#include<iostream>
+using namespace std;
+typedef struct bitnode {             //二叉树结点数据类型
+	int data;
+	struct bitnode* z;
+	struct bitnode* y;
+}Bitnode, * bitree;
+
+bitree zxc(int y[]) {
+	bitree a;
+	a = (bitree)malloc(sizeof(Bitnode));
+	a->data = y[0];
+	
+	a->y = a->z = NULL;
+	return a;
+}
+void TianJiaree(bitree a, int i) {      //添加节点 
+	bitree p, parent, head;
+	if (!(p = (bitree)malloc(sizeof(Bitnode)))) {
+		cout << "申请内存出错" << endl;
+		exit(0);
+	}
+	p->data =i ;//保存节点数据
+	p->y = p->z = NULL;//左右指针设为空
+	head = a; //移动指针，指头节点
+	while (head) {
+		parent = head;    //父节点始终未移动指针上一级
+		if (i < head->data)//关键字小于节点数据
+			head = head->z;//向左查找
+		else               //若大于
+			head = head->y;//向右查找
+	}
+	//判断添加到左还是右
+	if (i < parent->data)  //数据小于父节点
+		parent->z = p;//左
+	else                   //大于
+		parent->y = p;//右
+}
+void ChuanJiantree(bitree t, int a[], int n) {
+	int i;
+	for (i = 1; i < n; i++) {
+		TianJiaree(t, a[i]);
+	}
+ }
+void bianli(bitree root)      //遍历
+{
+	if (root)
+	{
+		bianli(root->z);
+		cout << root->data << " ";
+		bianli(root->y);
+	}
+}
+int main() {
+	char ac;
+	int a[20];
+	int ki=0;
+	do {
+		cin >> a[ki];
+		ki++;
+	} while ((ac=getchar())!='\n');
+	bitree qwe;
+	qwe = zxc(a);
+	ChuanJiantree(qwe, a, 10);
+	bianli(qwe);
+	return 0;
+}
